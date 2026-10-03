@@ -74,10 +74,8 @@ if [ "$#" -gt 0 ]; then
   exec "$@"
 fi
 
-set -- bun packages/web/bin/cli.js
+set -- bun packages/web/bin/cli.js serve --foreground --port "${PORT:-3000}"
 if [ -n "${OPENCHAMBER_UI_PASSWORD:-}" ]; then
   set -- "$@" --ui-password "$OPENCHAMBER_UI_PASSWORD"
 fi
-"$@"
-
-exec bun packages/web/bin/cli.js logs
+exec "$@"
