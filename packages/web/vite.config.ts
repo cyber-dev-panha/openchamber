@@ -176,6 +176,12 @@ export default defineConfig({
             return undefined;
           }
 
+          // These packages can be fully tree-shaken in production builds. Keep
+          // them out of named manual chunks so Rollup does not emit empty files.
+          if (packageName === 'reselect' || packageName === 'motion' || packageName === 'detect-node-es') {
+            return undefined;
+          }
+
           // Split @pierre/diffs by usage as well: the eager tool renderer needs
           // only its pure patch parser, while the Shiki-importing render stack
           // must stay loadable on demand. One merged vendor chunk would make
