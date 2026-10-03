@@ -92,6 +92,7 @@ RUN apt-get update \
 RUN userdel bun \
   && groupadd -g 1000 openchamber \
   && useradd \
+  --no-create-home \
   -u 1000 \
   -g 1000 \
   -d /home/openchamber \
