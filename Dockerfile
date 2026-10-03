@@ -44,7 +44,9 @@ COPY . .
 # Build it explicitly before building the web application.
 RUN bun run --cwd packages/sdk build
 
-RUN bun run build:web
+WORKDIR /app/packages/web
+
+RUN bun run build
 
 
 # ============================================================
