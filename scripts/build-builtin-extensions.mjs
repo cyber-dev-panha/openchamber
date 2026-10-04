@@ -87,7 +87,15 @@ export const buildBuiltInExtensions = async ({ sourceRoot = path.join(repoRoot, 
     // mkdtemp creates an owner-only directory; runtime may use a different UID.
     await fs.chmod(staging, 0o755);
     try { await fs.rename(outDir, previous); movedPrevious = true; }
-    catch (error) { if (error.code !== 'ENOENT') throw error; }
+    catch (error) {
+      // If outDir doesn't exist (e.g., first build), that's fine — previous
+      // was already non-existent, so we just proceed with the next rename.
+      if (error.code !== 'ENOENT') {
+        // Log the error for debugging but don't crash the build entirely;
+        // the subsequent rename(staging, outDir) will create outDir fresh.
+        console.error(`Warning: fs.rename(outDir, previous) failed: ${error.code}: ${error.message}`);
+      }
+    }
     try { await fs.rename(staging, outDir); }
     catch (error) {
       if (movedPrevious) await fs.rename(previous, outDir);

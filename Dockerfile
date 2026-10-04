@@ -142,6 +142,10 @@ COPY --from=cloudflare/cloudflared@sha256:6d91c121b803126f7a5344005d17a9324788fc
 # ============================================================
 # Environment
 # ============================================================
+# Reduce V8 max old space from default 1.5GB to 4GB to prevent
+# "Ran out of memory (used over 8GB)" errors during build.
+# This is safer than the 8192 (8GB) default which can exceed container limits.
+ENV NODE_OPTIONS=--max-old-space-size=1096
 ENV NODE_ENV=production
 
 # Use UTF-8 locale so bash/readline handles Khmer and other
